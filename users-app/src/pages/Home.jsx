@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 
+import { useNavigate } from "react-router-dom";
+
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
@@ -24,6 +26,8 @@ import Layout from '../components/Layout';
 
 
 const Home = props => {
+    const navigate = useNavigate();
+
     const [filters, setFilters] = useState({
         location: "",
         locationOpt: 0,
@@ -85,10 +89,12 @@ const Home = props => {
             };
             const paramString = btoa(JSON.stringify(params));
             try {
-                const uri = `users?page=${state.page}&rows=${state.rows}&query_params=${paramString}`;
+                const uri = `users?page=${state.page}`
+                    + `&rows=${state.rows}` 
+                    + `&query_params=${paramString}`;
                 const res = await fetch(GetAPIBaseURI() + uri)
                     .then(res => res.json());
-
+                    
                 setState(old => ({
                     ...old,
                     userLoaded: true,
@@ -198,6 +204,7 @@ const Home = props => {
                 variant="contained" 
                 size='small'
                 color='secondary'
+                onClick={() => navigate('/new')}
                 startIcon={<AddIcon />}
                 sx={{
                     display: {sm: 'flex', xs: 'none'}
@@ -208,6 +215,7 @@ const Home = props => {
             <IconButton 
                 aria-label="New users" 
                 color='secondary'
+                onClick={() => navigate('/new')}
                 size='small'
                 sx={{
                     display: {sm: 'none', xs: 'flex'}

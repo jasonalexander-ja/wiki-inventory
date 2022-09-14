@@ -3,7 +3,11 @@ export const user = {
     _id: {
         name: "Db",
         sortable: true,
-        exclude: true
+        exclude: true,
+        excludeSort: true,
+        excludeTable: true,
+        excludeCreateEdit: true,
+        ToString: (v) => v["$oid"]
     },
     name: {
         name: "Name",

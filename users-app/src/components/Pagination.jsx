@@ -54,6 +54,7 @@ const Pagination = props => {
                 size="small"
                 variant='standard'
                 color='primary'
+                disabled={opt.length <= 1}
             >
                 {opt}
             </TextField>

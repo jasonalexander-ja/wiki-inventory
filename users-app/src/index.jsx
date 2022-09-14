@@ -15,7 +15,7 @@ import useTheme from './theme';
 
 
 const Main = () => {
-    const theme = useTheme();
+    const theme = useTheme('dark');
 
     return (
         <ThemeProvider theme={theme}>

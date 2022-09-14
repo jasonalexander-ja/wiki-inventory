@@ -15,6 +15,7 @@ import {
 } from '@mui/material';
 
 import Home from './pages/Home';
+import New from './pages/New';
 
 
 const Container = styled(Grid)(({ theme }) => ({
@@ -49,6 +50,11 @@ const Router = props => {
                     exact 
                     path="/" 
                     element={<Home />}
+                />
+                <Route 
+                    exact 
+                    path="/new" 
+                    element={<New />}
                 />
             </Routes>
         </HashRouter>

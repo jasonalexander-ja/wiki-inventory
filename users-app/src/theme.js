@@ -6,10 +6,10 @@ import {
     cyan
 } from '@mui/material/colors';
 
-const useTheme = () => {
+const useTheme = mode => {
     return createTheme({
         palette: {
-            mode: 'dark',
+            mode: mode,
             primary: green,
             secondary: cyan
         }

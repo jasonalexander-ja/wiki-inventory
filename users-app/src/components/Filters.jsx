@@ -37,7 +37,6 @@ const Filters = props => {
     const colProps = {
         container: true, 
         item: true, 
-        //lg: 3,
         md: 6,
         xs: 12
     };
@@ -70,7 +69,7 @@ const Filters = props => {
     let filtersInputs = [];
 
     for (const key in schema) {
-        if ("exclude" in schema[key])
+        if ("excludeSort" in schema[key])
             continue;
         filtersInputs.push(
             <Grid {...colProps} key={`${key}-filter-input`}>

@@ -1,11 +1,13 @@
 import {
+    Grid,
     Table,
     Paper,
     TableRow,
     TableCell,
     TableHead,
     TableBody,
-    TableContainer
+    TableContainer,
+    Typography
 } from '@mui/material';
 
 import Sort from './Sort';
@@ -23,28 +25,86 @@ const DataTable = props => {
 
     const makeRow = (rowData) => {
         let cells = [];
+        let mobileCells = [];
         for (const key in schema) {
-            if ("exclude" in schema[key])
+            if ("excludeTable" in schema[key])
                 continue;
+            const value = "ToString" in schema[key] ? 
+                schema[key].ToString(rowData[key]) : rowData[key];
             cells.push(
                 <TableCell 
-                    key={`${rowData[idField]}-${key}`}
+                    key={`${rowData[idField]}-${key}-mobile-cell`}
+                    sx={{ 
+                        display: { xs: 'none', sm: 'table-cell' }
+                    }} 
                 >
-                    {rowData[key]}
+                    {value}
                 </TableCell>
             );
+            mobileCells.push(
+                <Grid 
+                    item
+                    xs={6}
+                    sx={{ 
+                        display: { xs: 'table-cell', sm: 'none' }
+                    }}
+                    key={`${rowData[idField]}-${key}-mobile-cell-title`}
+
+                >
+                    <Typography variant='body1'>
+                        <b>{schema[key].name}</b>
+                    </Typography>
+                </Grid>
+            );
+            mobileCells.push(
+                <Grid 
+                    item
+                    xs={6}
+                    sx={{ 
+                        display: { xs: 'table-cell', sm: 'none' }
+                    }}
+                    key={`${rowData[idField]}-${key}-mobile-cell-data`}
+
+                >
+                    <Typography variant='body1'>
+                        {value}
+                    </Typography>
+                </Grid>
+            );
         }
-        return (
+        
+        return [
             <TableRow
                 key={`${JSON.stringify(rowData[idField])}-row`}
-                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                sx={{ 
+                    display: { xs: 'none', sm: 'table-row' }
+                }}
             >
                 {cells}
                 <TableCell>
                     {actions.map(ac => ac(rowData))}
                 </TableCell>
+            </TableRow>,
+            <TableRow
+                key={`${JSON.stringify(rowData[idField])}-row-mobile`}
+                sx={{ 
+                    display: { xs: 'table-row', sm: 'none' }
+                }}
+            >
+                <TableCell>
+                    <Grid container>
+                        {mobileCells}
+                        <Grid 
+                            xs={12} 
+                            item
+                            container
+                        >
+                            {actions.map(ac => ac(rowData))}
+                        </Grid>
+                    </Grid>
+                </TableCell>
             </TableRow>
-        );
+        ];
     };
 
     let headers = [];
@@ -52,20 +112,21 @@ const DataTable = props => {
 
     for (const key in schema) {
         const field = schema[key];
-        if ("exclude" in field)
+        if ("excludeTable" in field)
             continue;
         headers.push(
             <TableCell 
-                sx={{ whiteSpace: 'nowrap' }} 
                 key={`${key}-datatable-field`}
             >
                 {field["name"]}
-                <Sort 
-                    sort={sorting[key]} 
-                    setSort={v => setSorter(key, v)} 
-                />
+                {"excludeSort" in schema[key] ? <></> :
+                    <Sort 
+                        sort={sorting[key]} 
+                        setSort={v => setSorter(key, v)} 
+                    /> 
+                }
             </TableCell>
-        )
+        );
     }
 
     for (const rowData in data) {
@@ -93,7 +154,11 @@ const DataTable = props => {
                 aria-label="Users table"
                 stickyHeader
             >
-                <TableHead>
+                <TableHead
+                    sx={{
+                        display: { xs: 'none', sm: 'table-header-group' }
+                    }}
+                >
                     <TableRow>
                         {headers}
                         {actionsHeader}
